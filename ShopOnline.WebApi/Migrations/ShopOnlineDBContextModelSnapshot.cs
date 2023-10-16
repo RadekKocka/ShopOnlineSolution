@@ -34,6 +34,9 @@ namespace ShopOnline.WebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
                     b.ToTable("Carts");
 
                     b.HasData(
@@ -68,6 +71,10 @@ namespace ShopOnline.WebApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ProductId");
+
                     b.ToTable("CartItems");
                 });
 
@@ -101,6 +108,8 @@ namespace ShopOnline.WebApi.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
 
@@ -411,6 +420,62 @@ namespace ShopOnline.WebApi.Migrations
                             Id = 2,
                             UserName = "Sarah"
                         });
+                });
+
+            modelBuilder.Entity("ShopOnline.WebApi.Entitities.Cart", b =>
+                {
+                    b.HasOne("ShopOnline.WebApi.Entitities.User", "UserLink")
+                        .WithOne("CartLink")
+                        .HasForeignKey("ShopOnline.WebApi.Entitities.Cart", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserLink");
+                });
+
+            modelBuilder.Entity("ShopOnline.WebApi.Entitities.CartItem", b =>
+                {
+                    b.HasOne("ShopOnline.WebApi.Entitities.Cart", "CartLink")
+                        .WithMany("CartItems")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShopOnline.WebApi.Entitities.Product", "ProductLink")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CartLink");
+
+                    b.Navigation("ProductLink");
+                });
+
+            modelBuilder.Entity("ShopOnline.WebApi.Entitities.Product", b =>
+                {
+                    b.HasOne("ShopOnline.WebApi.Entitities.ProductCategory", "ProductCategoryLink")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductCategoryLink");
+                });
+
+            modelBuilder.Entity("ShopOnline.WebApi.Entitities.Cart", b =>
+                {
+                    b.Navigation("CartItems");
+                });
+
+            modelBuilder.Entity("ShopOnline.WebApi.Entitities.ProductCategory", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("ShopOnline.WebApi.Entitities.User", b =>
+                {
+                    b.Navigation("CartLink");
                 });
 #pragma warning restore 612, 618
         }

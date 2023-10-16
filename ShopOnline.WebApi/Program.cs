@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using ShopOnline.WebApi.Data;
+using ShopOnline.WebApi.Repositories;
+using ShopOnline.WebApi.Repositories.Contracts;
+using Newtonsoft.Json;
+using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +15,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContextPool<ShopOnlineDBContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ShopOnlineConnectionString"));
+    options.UseSqlServer(Environment.GetEnvironmentVariable("ShopOnlineCS"));
 });
+builder.Services.AddScoped<IPoductRepository, ProductRepository>();
 
 var app = builder.Build();
 
@@ -22,6 +27,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(policy =>
+{
+    policy.WithOrigins("http://localhost:5121", "https://localhost:7232")
+    .AllowAnyMethod()
+    .WithHeaders(HeaderNames.ContentType);
+});
 
 app.UseHttpsRedirection();
 

@@ -1,6 +1,6 @@
 {
-  "name": "ShopOnlineSolution.Web",
-  "short_name": "ShopOnlineSolution.Web",
+  "name": "ShopOnline.Web",
+  "short_name": "ShopOnline.Web",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",

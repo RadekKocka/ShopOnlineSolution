@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "ShopOnlineSolution.Web": {
+    "ShopOnline.Web": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
